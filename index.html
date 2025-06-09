@@ -55,6 +55,12 @@
       margin: 20px auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
+    #success-message {
+      display: none;
+      margin-top: 20px;
+      color: #6a38c2;
+      font-weight: bold;
+    }
   </style>
   <script>
     const deadline = new Date("2025-06-15T23:59:59+08:00");
@@ -63,14 +69,21 @@
       if (new Date() > deadline) location.href = "timesup.html";
     };
 
-    function validateAndSubmit(e) {
+    function validateForm(e) {
       const name = document.getElementById("name").value.trim();
       if (!name) {
-        alert("請輸入社群名字才能參加！");
         e.preventDefault();
-      } else {
-        alert("🎉 已送出，感謝參加！");
+        alert("請輸入社群名字才能參加！");
+        return false;
       }
+
+      // 送出前先清空欄位，讓使用者知道有送出
+      setTimeout(() => {
+        document.getElementById("form").style.display = "none";
+        document.getElementById("success-message").style.display = "block";
+      }, 500);
+
+      return true;
     }
   </script>
 </head>
@@ -79,7 +92,9 @@
   <p>🎁 獎品：Drama 白版未拆專（封面可自選）</p>
   <img src="g.jpg" alt="Drama 專輯圖" class="prize-image" />
   <p>填入你的社群名字，即可參加抽獎！<br>活動截止：2025/6/15 晚上 11:59</p>
-  <form onsubmit="validateAndSubmit(event)"
+
+  <form id="form"
+        onsubmit="return validateForm(event)"
         method="POST"
         action="https://docs.google.com/forms/d/e/1FAIpQLScO7oArWiXokQqw-7Fgxa0b_KVj-72VUG1aHv5HSmaNhIR25A/formResponse"
         target="hidden_iframe">
@@ -87,7 +102,11 @@
     <br />
     <button type="submit">參加抽獎</button>
   </form>
+
+  <div id="success-message">✅ 已成功參加抽獎！祝你中獎 🍀</div>
+
   <iframe name="hidden_iframe" style="display:none;"></iframe>
+
   <div class="footer">Made with 💜 by MY for aespa</div>
 </body>
 </html>
